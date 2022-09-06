@@ -1,4 +1,6 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
+import User from "./userModel.js";
+
 const reviewSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -8,7 +10,8 @@ const reviewSchema = mongoose.Schema(
   {
     timestamps: true,
   }
-)
+);
+
 const productSchema = mongoose.Schema(
   {
     user: {
@@ -29,31 +32,31 @@ const productSchema = mongoose.Schema(
       required: true,
     },
     category: {
-      type: string,
+      type: String,
       required: true,
     },
     description: {
-      type: string,
+      type: String,
       required: true,
     },
     reviews: [reviewSchema],
     rating: {
-      type: number,
+      type: Number,
       required: true,
       default: 0,
     },
     numReviews: {
-      type: number,
+      type: Number,
       required: true,
       default: 0,
     },
     price: {
-      type: number,
+      type: Number,
       required: true,
       default: 0,
     },
     countInStock: {
-      type: number,
+      type: Number,
       required: true,
       default: 0,
     },
@@ -61,8 +64,8 @@ const productSchema = mongoose.Schema(
   {
     timestamps: true,
   }
-)
+);
 
-const Product = mongoose.model('User', productSchema)
+const Product = mongoose.model("Product", productSchema);
 
-export default Product
+export default Product;

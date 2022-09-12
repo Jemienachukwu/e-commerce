@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { Row, Col } from 'react-bootstrap'
-import Product from '../component/Product'
-import axios from 'axios'
+import React, { useState, useEffect } from "react";
+import { Row, Col } from "react-bootstrap";
+import Product from "../component/Product";
+import axios from "axios";
 
 const HomeScreen = () => {
-  const [products, setproducts] = useState([])
+  const [products, setproducts] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const {data} = await axios.get('/api/products')
-      setproducts(data)
-    }
-    fetchProducts()
-  }, [])
+      const { data } = await axios.get("/api/products");
+      setproducts(data);
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <>
@@ -25,7 +25,7 @@ const HomeScreen = () => {
         ))}
       </Row>
     </>
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;

@@ -16,7 +16,7 @@ import Loader from "../component/Loader";
 import Message from "../component/Message";
 
 const ProductScreen = () => {
-  const [qty, setQty] = useState(0);
+  const [qty, setQty] = useState(1);
 
   let { id } = useParams();
   let navigate = useNavigate();
@@ -28,8 +28,9 @@ const ProductScreen = () => {
   useEffect(() => {
     dispatch(listProductDetails(id));
   }, [dispatch, id]);
+
   const addToCart = () => {
-    navigate(`/cart/${id}?qty${qty}`);
+    navigate(`/cart/${id}?qty=${qty}`);
   };
 
   return (

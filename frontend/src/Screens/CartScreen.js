@@ -26,11 +26,12 @@ const CartScreen = () => {
   useEffect(() => {
     id && dispatch(addToCart(id, qty));
   }, [dispatch, id, qty]);
+
   const removeHandler = (id) => {
     dispatch(removeFromCart(id));
   };
   const checkOut = () => {
-    navigate("login?redirect=shipping");
+    navigate("/login?redirect=shipping");
   };
   return (
     <Row>

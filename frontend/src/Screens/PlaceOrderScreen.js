@@ -1,12 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Message from "../component/Message";
 import CheckoutSteps from "../component/CheckoutSteps";
+import { createOrder } from "../actions/orderActions";
 
 export const PlaceOrderScreen = () => {
+  let navigate = useNavigate();
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+
+  const payment = JSON.parse(localStorage.getItem("paymentMethod"));
+  console.log(payment);
 
   function addDecimals(number) {
     return (Math.round(number * 100) / 100).toFixed(2);
@@ -24,8 +30,29 @@ export const PlaceOrderScreen = () => {
     Number(cart.shippingPrice) +
     Number(cart.taxPrice)
   ).toFixed(2);
+
+  const orderCreate = useSelector((state) => state.orderCreate);
+  const { order, success, error } = orderCreate;
+
+  useEffect(() => {
+    if (success) {
+      navigate(`/orders/${order._id}`);
+    }
+    // eslint-disable-next-line
+  }, [navigate, success]);
+
   const placeOrder = () => {
-    console.log("paymentMethod");
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: payment,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      })
+    );
   };
   return (
     <>
@@ -44,12 +71,12 @@ export const PlaceOrderScreen = () => {
             <ListGroup.Item>
               <h2>Payment Method</h2>
               <strong>Method:</strong>
-              {cart.PaymentMethod}
+              {payment}
             </ListGroup.Item>
             <ListGroup.Item>
               <h2>Order Items</h2>
               {cart.cartItems.length === 0 ? (
-                <Message>Ypur Cart Is Empty</Message>
+                <Message>Your Cart Is Empty</Message>
               ) : (
                 <ListGroup variant="flush">
                   {cart.cartItems.map((item, i) => (
@@ -117,6 +144,9 @@ export const PlaceOrderScreen = () => {
                   <Col>Total</Col>
                   <Col>${cart.totalprice}</Col>
                 </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                {error && <Message variant="danger">{error}</Message>}
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>

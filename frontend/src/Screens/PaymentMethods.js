@@ -14,7 +14,7 @@ export const PaymentMethodsScreen = () => {
   if (!shippingAddress) {
     navigate("/shipping");
   }
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("paypal");
 
   const dispatch = useDispatch();
 

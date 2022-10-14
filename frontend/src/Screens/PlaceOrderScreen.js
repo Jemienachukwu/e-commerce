@@ -24,12 +24,11 @@ export const PlaceOrderScreen = () => {
 
   cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)));
 
-  cart.totalprice = (
+  cart.totalPrice = (
     Number(cart.itemsPrice) +
     Number(cart.shippingPrice) +
     Number(cart.taxPrice)
   ).toFixed(2);
-
   const orderCreate = useSelector((state) => state.orderCreate);
   const { order, success, error } = orderCreate;
 
@@ -141,7 +140,7 @@ export const PlaceOrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${cart.totalprice}</Col>
+                  <Col>${cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>

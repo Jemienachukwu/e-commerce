@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
+// import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import Message from "../component/Message";
 import Loader from "../component/Loader";
 import { getOrderDetails } from "../actions/orderActions";
+// import { config } from "dotenv";
 
 export const OrderScreen = () => {
   let { id } = useParams();
   const dispatch = useDispatch();
 
   const payment = JSON.parse(localStorage.getItem("paymentMethod"));
-
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
   if (!loading) {
@@ -23,9 +25,16 @@ export const OrderScreen = () => {
     );
   }
   useEffect(() => {
-    dispatch(getOrderDetails(id));
-    // eslint-disable-next-line
-  }, []);
+    // const addPayPalScript = async () => {
+    //   const { data: clientId } = await axios.get("api/config/paypal");
+    //   console.log(clientId);
+    // };
+    // addPayPalScript();
+    if (!order || order._id === id) {
+      // eslint-disable-next-line
+      dispatch(getOrderDetails(id));
+    }
+  }, [order, id]);
 
   return loading ? (
     <Loader />
@@ -40,11 +49,11 @@ export const OrderScreen = () => {
             <ListGroup.Item>
               <h1>Shipping</h1>
               <p>
-                <strong>Name:</strong> {order.user.name}
+                <strong>Name:</strong> {user.name}
               </p>
               <p>
                 <strong>Email:</strong>
-                <a href={`mailto:${order.user.name}`}>{order.user.name}</a>
+                <a href={`mailto:${user.email}`}>{user.email}</a>
               </p>
               <p>
                 <strong>Address:</strong>

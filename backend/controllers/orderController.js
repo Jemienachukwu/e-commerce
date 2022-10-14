@@ -60,3 +60,37 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
     throw new Error("Order not found");
   }
 });
+
+export const updatePaystack = asyncHandler(async (req, res) => {
+  const { id, reference } = req.body;
+  const order = await Order.findById(id);
+  if (order) {
+    const update = await Order.findByIdAndUpdate(id, {
+      payStackReference: reference,
+      isPaid: true,
+      paidAt: new Date(),
+    });
+
+    await update.save();
+
+    const ord = await Order.findById(id);
+    if (update) {
+      res.json({
+        hasError: false,
+        message: "Payment Successful",
+        update,
+        ord,
+      });
+    } else {
+      res.json({
+        hasError: true,
+        message: "Something went wrong",
+      });
+    }
+  } else {
+    res.json({
+      hasError: true,
+      message: "Order not found ",
+    });
+  }
+});

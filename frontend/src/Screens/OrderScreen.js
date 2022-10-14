@@ -6,16 +6,24 @@ import { useSelector, useDispatch } from "react-redux";
 import Message from "../component/Message";
 import Loader from "../component/Loader";
 import { getOrderDetails } from "../actions/orderActions";
-// import { config } from "dotenv";
-
+import { PaystackButton } from "react-paystack";
+import { ORDER_PAY_RESET } from "../constants/orderConstants";
+import axios from "axios";
 export const OrderScreen = () => {
   let { id } = useParams();
   const dispatch = useDispatch();
 
+  const [state, setState] = React.useState(false);
+
   const payment = JSON.parse(localStorage.getItem("paymentMethod"));
   const user = JSON.parse(localStorage.getItem("userInfo"));
+
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
+  console.log(order);
+  const orderPay = useSelector((state) => state.orderPay);
+  const { loading: loadingPay, success: successPay } = orderPay;
+
   if (!loading) {
     function addDecimals(number) {
       return (Math.round(number * 100) / 100).toFixed(2);
@@ -24,18 +32,53 @@ export const OrderScreen = () => {
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     );
   }
-  useEffect(() => {
-    // const addPayPalScript = async () => {
-    //   const { data: clientId } = await axios.get("api/config/paypal");
-    //   console.log(clientId);
-    // };
-    // addPayPalScript();
-    if (!order || order._id === id) {
-      // eslint-disable-next-line
-      dispatch(getOrderDetails(id));
-    }
-  }, [order, id]);
 
+  useEffect(() => {
+    console.log(order?.totalPrice);
+    if (!order || successPay) {
+      dispatch({ type: ORDER_PAY_RESET });
+      if (!order || order._id === id) {
+        dispatch(getOrderDetails(id));
+      }
+    }
+  }, [order, id, dispatch, successPay]);
+
+  const key = "pk_test_5608d48adde6e6434427bef8eb5238d9dc66c672";
+  console.log(key);
+  const componentProps = {
+    email: user.email,
+    amount: parseInt(order?.totalPrice) * 100,
+    metadata: {
+      name: user.name,
+    },
+    publicKey: key,
+    text: "Pay Now",
+    onSuccess: (res) => {
+      const body = {
+        id: order._id,
+        reference: res.reference,
+      };
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      if (res.status === "success") {
+        axios
+          .post("/api/orders/updatePastack", body, config)
+          .then((resp) => {
+            console.log(resp);
+            setState(!state);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    },
+    onClose: () => alert("Wait! You need this oil, don't go!!!!"),
+  };
   return loading ? (
     <Loader />
   ) : error ? (
@@ -131,27 +174,33 @@ export const OrderScreen = () => {
                   <Col>${order.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
                   <Col>${order.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
                   <Col>${order.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
-
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
                   <Col>{order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  <Row>
+                    {loadingPay && <Loader />}
+                    <PaystackButton {...componentProps} />
+                  </Row>
+                </ListGroup.Item>
+              )}
+
               <ListGroup.Item></ListGroup.Item>
             </ListGroup>
           </Card>

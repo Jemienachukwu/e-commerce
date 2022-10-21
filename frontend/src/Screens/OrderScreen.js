@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-// import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,21 +8,23 @@ import { getOrderDetails } from "../actions/orderActions";
 import { PaystackButton } from "react-paystack";
 import { ORDER_PAY_RESET } from "../constants/orderConstants";
 import axios from "axios";
+
 export const OrderScreen = () => {
   let { id } = useParams();
   const dispatch = useDispatch();
 
-  const [state, setState] = React.useState(false);
+  const [err, setErr] = useState(false);
+  // const [load, setLoad] = useState(false);
 
   const payment = JSON.parse(localStorage.getItem("paymentMethod"));
   const user = JSON.parse(localStorage.getItem("userInfo"));
 
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
-  console.log(order);
   const orderPay = useSelector((state) => state.orderPay);
-  const { loading: loadingPay, success: successPay } = orderPay;
+  const { loading: loadingPay } = orderPay;
 
+  //order calculations
   if (!loading) {
     function addDecimals(number) {
       return (Math.round(number * 100) / 100).toFixed(2);
@@ -34,24 +35,24 @@ export const OrderScreen = () => {
   }
 
   useEffect(() => {
-    console.log(order?.totalPrice);
-    if (!order || successPay) {
-      dispatch({ type: ORDER_PAY_RESET });
-      if (!order || order._id === id) {
-        dispatch(getOrderDetails(id));
-      }
-    }
-  }, [order, id, dispatch, successPay]);
+    // if (!order || successPay) {
+    //   dispatch({ type: ORDER_PAY_RESET });
+    //   if (!order || order._id === id) {
+    //     dispatch(getOrderDetails(id));
+    //   }
+    // }
 
-  const key = "pk_test_5608d48adde6e6434427bef8eb5238d9dc66c672";
-  console.log(key);
+    dispatch({ type: ORDER_PAY_RESET });
+    dispatch(getOrderDetails(id));
+  }, [dispatch, id]);
+
   const componentProps = {
     email: user.email,
     amount: parseInt(order?.totalPrice) * 100,
     metadata: {
       name: user.name,
     },
-    publicKey: key,
+    publicKey: "pk_test_5608d48adde6e6434427bef8eb5238d9dc66c672",
     text: "Pay Now",
     onSuccess: (res) => {
       const body = {
@@ -68,14 +69,12 @@ export const OrderScreen = () => {
       if (res.status === "success") {
         axios
           .post("/api/orders/updatePastack", body, config)
-          .then((resp) => {
-            console.log(resp);
-            setState(!state);
-          })
+
           .catch((err) => {
-            console.log(err);
+            setErr(!err);
           });
       }
+      window.location.reload();
     },
     onClose: () => alert("Wait! You need this oil, don't go!!!!"),
   };
@@ -196,6 +195,7 @@ export const OrderScreen = () => {
                 <ListGroup.Item>
                   <Row>
                     {loadingPay && <Loader />}
+                    {err && <Message>{err}</Message>}
                     <PaystackButton {...componentProps} />
                   </Row>
                 </ListGroup.Item>

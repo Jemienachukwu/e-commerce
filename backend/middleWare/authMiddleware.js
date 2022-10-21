@@ -25,3 +25,12 @@ export const protect = AsyncHandler(async (req, res, next) => {
     throw new Error("unAuthorized Access, no token found");
   }
 });
+
+export const admin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401);
+    throw new Error("Unauthorised Access");
+  }
+};

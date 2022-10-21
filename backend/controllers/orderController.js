@@ -43,23 +43,23 @@ export const getOrderItems = asyncHandler(async (req, res) => {
   }
 });
 
-export const updateOrderToPaid = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
-  if (order) {
-    (order.isPaid = true), (order.paidAt = Date.now());
-    order.paymentResult = {
-      id: req.body.id,
-      statuse: req.body.status,
-      update_time: req.body.update_time,
-      email_address: req.body.payer.email_address,
-    };
-    const updatedOrder = await order.save();
-    res.json(updatedOrder);
-  } else {
-    res.status(404);
-    throw new Error("Order not found");
-  }
-});
+// export const updateOrderToPaid = asyncHandler(async (req, res) => {
+//   const order = await Order.findById(req.params.id);
+//   if (order) {
+//     (order.isPaid = true), (order.paidAt = Date.now());
+//     order.paymentResult = {
+//       id: req.body.id,
+//       statuse: req.body.status,
+//       update_time: req.body.update_time,
+//       email_address: req.body.payer.email_address,
+//     };
+//     const updatedOrder = await order.save();
+//     res.json(updatedOrder);
+//   } else {
+//     res.status(404);
+//     throw new Error("Order not found");
+//   }
+// });
 
 export const updatePaystack = asyncHandler(async (req, res) => {
   const { id, reference } = req.body;
@@ -73,24 +73,25 @@ export const updatePaystack = asyncHandler(async (req, res) => {
 
     await update.save();
 
-    const ord = await Order.findById(id);
+    const getOrder = await Order.findById(id);
     if (update) {
       res.json({
         hasError: false,
         message: "Payment Successful",
         update,
-        ord,
+        getOrder,
       });
     } else {
-      res.json({
-        hasError: true,
-        message: "Something went wrong",
-      });
+      res.status(404);
+      throw new Error("Somthing Went Wrong");
     }
   } else {
-    res.json({
-      hasError: true,
-      message: "Order not found ",
-    });
+    res.status(404);
+    throw new Error("order not found");
   }
+});
+
+export const getMyOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id });
+  res.json(orders);
 });

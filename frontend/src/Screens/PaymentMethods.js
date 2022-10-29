@@ -6,7 +6,7 @@ import FormContainer from "../component/formContainer";
 import { savepaymentMethods } from "../actions/cartAction";
 import CheckoutSteps from "../component/CheckoutSteps";
 
-export const PaymentMethodsScreen = () => {
+const PaymentMethodsScreen = () => {
   let navigate = useNavigate();
 
   const cart = useSelector((state) => state.cart);
@@ -52,3 +52,5 @@ export const PaymentMethodsScreen = () => {
     </FormContainer>
   );
 };
+
+export default PaymentMethodsScreen;

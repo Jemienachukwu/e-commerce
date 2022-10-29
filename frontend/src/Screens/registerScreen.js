@@ -7,7 +7,7 @@ import Loader from "../component/Loader";
 import FormContainer from "../component/formContainer";
 import { register } from "../actions/userAction";
 
-export const RegisterScreen = () => {
+const RegisterScreen = () => {
   let location = useLocation();
   let navigate = useNavigate();
 
@@ -103,3 +103,5 @@ export const RegisterScreen = () => {
     </>
   );
 };
+
+export default RegisterScreen;

@@ -6,7 +6,7 @@ import Message from "../component/Message";
 import CheckoutSteps from "../component/CheckoutSteps";
 import { createOrder } from "../actions/orderActions";
 
-export const PlaceOrderScreen = () => {
+const PlaceOrderScreen = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
@@ -165,3 +165,5 @@ export const PlaceOrderScreen = () => {
     </>
   );
 };
+
+export default PlaceOrderScreen;

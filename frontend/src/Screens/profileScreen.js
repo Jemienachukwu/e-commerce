@@ -7,7 +7,8 @@ import Message from "../component/Message";
 import Loader from "../component/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userAction";
 import { orderMyList } from "../actions/orderActions";
-export const ProfileScreen = () => {
+
+const ProfileScreen = () => {
   let navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -162,3 +163,5 @@ export const ProfileScreen = () => {
     </Row>
   );
 };
+
+export default ProfileScreen;

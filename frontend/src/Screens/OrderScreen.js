@@ -9,7 +9,7 @@ import { PaystackButton } from "react-paystack";
 import { ORDER_PAY_RESET } from "../constants/orderConstants";
 import axios from "axios";
 
-export const OrderScreen = () => {
+const OrderScreen = () => {
   let { id } = useParams();
   const dispatch = useDispatch();
 
@@ -209,3 +209,4 @@ export const OrderScreen = () => {
     </>
   );
 };
+export default OrderScreen;

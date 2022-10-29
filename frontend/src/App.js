@@ -8,13 +8,15 @@ import HomeScreen from "./Screens/HomeScreen";
 import ProductScreen from "./Screens/ProductScreen";
 import CartScreen from "./Screens/CartScreen";
 import LoginScreen from "./Screens/LoginScreen";
-import { RegisterScreen } from "./Screens/registerScreen";
-import { ProfileScreen } from "./Screens/profileScreen";
+import RegisterScreen from "./Screens/registerScreen";
+import ProfileScreen from "./Screens/profileScreen";
 import ShippingScreen from "./Screens/shippingScreen";
-import { PaymentMethodsScreen } from "./Screens/PaymentMethods";
-import { PlaceOrderScreen } from "./Screens/PlaceOrderScreen";
-import { OrderScreen } from "./Screens/OrderScreen";
+import PaymentMethodsScreen from "./Screens/PaymentMethods";
+import PlaceOrderScreen from "./Screens/PlaceOrderScreen";
+import OrderScreen from "./Screens/OrderScreen";
 import UserListScreen from "./Screens/UserListScreen";
+import UserEditScreen from "./Screens/UserEditScreen";
+import ProductListScreen from "./Screens/ProductListScreen";
 
 const App = () => {
   return (
@@ -34,6 +36,8 @@ const App = () => {
             <Route path="/cart/:id" element={<CartScreen />} />
             <Route path="/cart" element={<CartScreen />} />
             <Route path="/admin/userlist" element={<UserListScreen />} />
+            <Route path="/admin/user/:id/edit" element={<UserEditScreen />} />
+            <Route path="/admin/productlist" element={<ProductListScreen />} />
             <Route path="/" element={<HomeScreen />} exact />
           </Routes>
         </Container>

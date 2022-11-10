@@ -22,6 +22,7 @@ const orderSchema = mongoose.Schema(
         },
       },
     ],
+
     shippingAddress: {
       address: {
         type: String,
@@ -40,6 +41,7 @@ const orderSchema = mongoose.Schema(
         required: true,
       },
     },
+
     paymentMethod: {
       type: String,
       required: true,

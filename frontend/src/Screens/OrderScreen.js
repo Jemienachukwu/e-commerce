@@ -1,28 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import Message from "../component/Message";
 import Loader from "../component/Loader";
-import { getOrderDetails } from "../actions/orderActions";
+import { getOrderDetails, deliverOrder } from "../actions/orderActions";
 import { PaystackButton } from "react-paystack";
-import { ORDER_PAY_RESET } from "../constants/orderConstants";
+import {
+  ORDER_PAY_RESET,
+  ORDER_DELIVER_RESET,
+} from "../constants/orderConstants";
 import axios from "axios";
 
 const OrderScreen = () => {
   let { id } = useParams();
+  let { navigate } = useNavigate();
   const dispatch = useDispatch();
 
   const [err, setErr] = useState(false);
-  // const [load, setLoad] = useState(false);
 
   const payment = JSON.parse(localStorage.getItem("paymentMethod"));
-  const user = JSON.parse(localStorage.getItem("userInfo"));
+  // const user = JSON.parse(localStorage.getItem("userInfo"));
 
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   const orderPay = useSelector((state) => state.orderPay);
   const { loading: loadingPay } = orderPay;
+
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
 
   //order calculations
   if (!loading) {
@@ -41,16 +51,21 @@ const OrderScreen = () => {
     //     dispatch(getOrderDetails(id));
     //   }
     // }
-
+    if (!userInfo) {
+      navigate("/login");
+    }
+    if (successDeliver) {
+      dispatch({ type: ORDER_DELIVER_RESET });
+    }
     dispatch({ type: ORDER_PAY_RESET });
     dispatch(getOrderDetails(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, successDeliver, userInfo, navigate]);
 
   const componentProps = {
-    email: user.email,
+    email: userInfo.email,
     amount: parseInt(order?.totalPrice) * 100,
     metadata: {
-      name: user.name,
+      name: userInfo.name,
     },
     publicKey: "pk_test_5608d48adde6e6434427bef8eb5238d9dc66c672",
     text: "Pay Now",
@@ -63,7 +78,7 @@ const OrderScreen = () => {
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${userInfo.token}`,
         },
       };
       if (res.status === "success") {
@@ -78,6 +93,9 @@ const OrderScreen = () => {
     },
     onClose: () => alert("Wait! You need this oil, don't go!!!!"),
   };
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
+  };
   return loading ? (
     <Loader />
   ) : error ? (
@@ -91,11 +109,11 @@ const OrderScreen = () => {
             <ListGroup.Item>
               <h1>Shipping</h1>
               <p>
-                <strong>Name:</strong> {user.name}
+                <strong>Name:</strong> {userInfo.name}
               </p>
               <p>
                 <strong>Email:</strong>
-                <a href={`mailto:${user.email}`}>{user.email}</a>
+                <a href={`mailto:${userInfo.email}`}>{userInfo.email}</a>
               </p>
               <p>
                 <strong>Address:</strong>
@@ -200,7 +218,23 @@ const OrderScreen = () => {
                   </Row>
                 </ListGroup.Item>
               )}
-
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Button
+                        type="button"
+                        className="btn btn-block"
+                        onClick={deliverHandler}
+                      >
+                        Mark As Delivered
+                      </Button>
+                    </Row>
+                  </ListGroup.Item>
+                )}
               <ListGroup.Item></ListGroup.Item>
             </ListGroup>
           </Card>

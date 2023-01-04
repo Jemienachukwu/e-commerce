@@ -20,7 +20,6 @@ const OrderScreen = () => {
   const [err, setErr] = useState(false);
 
   const payment = JSON.parse(localStorage.getItem("paymentMethod"));
-  // const user = JSON.parse(localStorage.getItem("userInfo"));
 
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
@@ -214,7 +213,7 @@ const OrderScreen = () => {
                   <Row>
                     {loadingPay && <Loader />}
                     {err && <Message>{err}</Message>}
-                    <PaystackButton {...componentProps} />
+                    <PaystackButton {...componentProps} className="paystack" />
                   </Row>
                 </ListGroup.Item>
               )}

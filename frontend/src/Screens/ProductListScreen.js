@@ -56,7 +56,9 @@ const ProductListScreen = () => {
   ]);
 
   const deleteHandler = (id) => {
-    if (window.confirm("Are You Sure You Want To Delete This product?")) {
+    const delProduct = products.find((prod) => id === prod._id);
+    const deletedProductName = `Are You Sure You Want To delete ${delProduct.name} ?`;
+    if (window.confirm(deletedProductName)) {
       dispatch(deleteProduct(id));
       window.location.reload();
     }
@@ -70,8 +72,8 @@ const ProductListScreen = () => {
         <Col>
           <h1>Products</h1>
         </Col>
-        <Col className="text-right">
-          <Button className="ms-auto" onClick={createHandler}>
+        <Col className="text-end">
+          <Button className="my-3" onClick={createHandler}>
             <i className="fas fa-plus"></i> Create Product
           </Button>
         </Col>
@@ -105,8 +107,11 @@ const ProductListScreen = () => {
                 <td>{product.category}</td>
                 <td>{product.brand}</td>
                 <td>
-                  <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                    <Button variant="light" className="btn-sm">
+                  <LinkContainer
+                    to={`/admin/product/${product._id}/edit`}
+                    className="my-2"
+                  >
+                    <Button variant="dark" className="btn-sm">
                       <i className="fas fa-edit"></i>
                     </Button>
                   </LinkContainer>

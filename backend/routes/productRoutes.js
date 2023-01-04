@@ -7,10 +7,12 @@ import {
   getProductById,
   getProducts,
   updateProduct,
+  reviewProduct,
 } from "../controllers/productController.js";
 const router = express.Router();
 
 router.route("/").get(getProducts).post(protect, admin, createProduct);
+router.route("/:id/reviews").post(protect, reviewProduct);
 
 router
   .route("/:id")

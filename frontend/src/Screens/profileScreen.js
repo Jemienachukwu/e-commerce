@@ -7,7 +7,8 @@ import Message from "../component/Message";
 import Loader from "../component/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userAction";
 import { orderMyList } from "../actions/orderActions";
-
+import { AiFillEye } from "react-icons/ai";
+import { AiFillEyeInvisible } from "react-icons/ai";
 const ProfileScreen = () => {
   let navigate = useNavigate();
 
@@ -16,6 +17,7 @@ const ProfileScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -53,7 +55,10 @@ const ProfileScreen = () => {
       dispatch(updateUserProfile({ id: user._id, name, email, password }));
     }
   }
-
+  const togglePassword = () => {
+    console.log("hiiii");
+    setShowPassword(!showPassword);
+  };
   return (
     <Row>
       <Col md={3}>
@@ -88,7 +93,7 @@ const ProfileScreen = () => {
           <Form.Group controlId="password">
             <Form.Label>Password</Form.Label>
             <Form.Control
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -98,11 +103,16 @@ const ProfileScreen = () => {
           <Form.Group controlId="confirmpassword">
             <Form.Label>confirm Password</Form.Label>
             <Form.Control
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Confirm password"
               value={confirmpassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></Form.Control>
+            <AiFillEye
+              style={{ fontSize: "25px", cursor: "pointer", margin: "20px" }}
+              // onClick={togglePassword}
+              onHover={togglePassword}
+            />
           </Form.Group>
           <Button type="submit" variant="primary">
             Update
@@ -128,7 +138,7 @@ const ProfileScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {orders?.map((order) => (
                 <tr key={order._id} style={{ color: "green" }}>
                   <th>{order._id}</th>
                   <th>{order.createdAt.substring(0, 10)}</th>
@@ -141,8 +151,8 @@ const ProfileScreen = () => {
                     )}{" "}
                   </th>
                   <th>
-                    {order.isDelivered ? (
-                      order.DeliveredAt.substring(0, 10)
+                    {order?.isDelivered ? (
+                      order.deliveredAt.substring(0, 10)
                     ) : (
                       <i className="fas fa-times" style={{ color: "red" }}></i>
                     )}{" "}

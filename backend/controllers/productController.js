@@ -67,6 +67,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
+// reviews
 export const reviewProduct = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body;
 

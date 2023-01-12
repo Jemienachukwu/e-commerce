@@ -54,11 +54,11 @@ const ProfileScreen = () => {
     } else {
       dispatch(updateUserProfile({ id: user._id, name, email, password }));
     }
+    setShowPassword(false);
   }
-  const togglePassword = () => {
-    console.log("hiiii");
-    setShowPassword(!showPassword);
-  };
+  // const togglePassword = () => {
+  //   setShowPassword(!showPassword);
+  // };
   return (
     <Row>
       <Col md={3}>
@@ -108,11 +108,21 @@ const ProfileScreen = () => {
               value={confirmpassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             ></Form.Control>
-            <AiFillEye
-              style={{ fontSize: "25px", cursor: "pointer", margin: "20px" }}
-              // onClick={togglePassword}
-              onHover={togglePassword}
-            />
+            {showPassword ? (
+              <AiFillEyeInvisible
+                style={{ fontSize: "25px", cursor: "pointer", margin: "20px" }}
+                onClick={() => {
+                  setShowPassword(false);
+                }}
+              />
+            ) : (
+              <AiFillEye
+                style={{ fontSize: "25px", cursor: "pointer", margin: "20px" }}
+                onClick={() => {
+                  setShowPassword(true);
+                }}
+              />
+            )}
           </Form.Group>
           <Button type="submit" variant="primary">
             Update
@@ -133,7 +143,7 @@ const ProfileScreen = () => {
                 <th>DATE</th>
                 <th>TOTAL</th>
                 <th>PAID</th>
-                <th>DELIVERED</th>
+                <th>SHIPPED</th>
                 <th></th>
               </tr>
             </thead>
@@ -159,7 +169,7 @@ const ProfileScreen = () => {
                   </th>
                   <th>
                     <LinkContainer to={`/orders/${order._id}`}>
-                      <Button variant="light" className="btn-sm">
+                      <Button variant="dark" className="btn-sm">
                         Details
                       </Button>
                     </LinkContainer>

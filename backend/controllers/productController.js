@@ -2,8 +2,22 @@ import asyncHandler from "express-async-handler";
 import Product from "../models/productModel.js";
 
 export const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
-  res.json(products);
+  const pageSize = 2;
+  const page = Number(req.query.pageNumber) || 1;
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
+  const count = await Product.count({ ...keyword });
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 export const getProductById = asyncHandler(async (req, res) => {
@@ -42,6 +56,11 @@ export const createProduct = asyncHandler(async (req, res) => {
 
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);
+});
+
+export const getTopProucts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+  res.json(products);
 });
 
 export const updateProduct = asyncHandler(async (req, res) => {

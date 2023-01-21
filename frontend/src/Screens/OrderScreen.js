@@ -44,12 +44,6 @@ const OrderScreen = () => {
   }
 
   useEffect(() => {
-    // if (!order || successPay) {
-    //   dispatch({ type: ORDER_PAY_RESET });
-    //   if (!order || order._id === id) {
-    //     dispatch(getOrderDetails(id));
-    //   }
-    // }
     if (!userInfo) {
       navigate("/login");
     }
@@ -66,7 +60,7 @@ const OrderScreen = () => {
     metadata: {
       name: userInfo.name,
     },
-    publicKey: "pk_test_5608d48adde6e6434427bef8eb5238d9dc66c672",
+    publicKey: process.env.REACT_APP_PUBLIC_KEY,
     text: "Pay Now",
     onSuccess: (res) => {
       const body = {

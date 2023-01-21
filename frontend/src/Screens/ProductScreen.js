@@ -15,6 +15,7 @@ import {
 import Rating from "../component/Rating";
 import Loader from "../component/Loader";
 import Message from "../component/Message";
+import Meta from "../component/Meta";
 
 const ProductScreen = () => {
   let { id } = useParams();
@@ -31,8 +32,8 @@ const ProductScreen = () => {
 
   const { userInfo } = useSelector((state) => state.userLogin);
 
-  const productReviews = useSelector((state) => state.productDetails);
-  const { success: sucessReview, error: errorReview } = productReviews;
+  const productReview = useSelector((state) => state.productReview);
+  const { success: sucessReview, error: errorReview } = productReview;
 
   useEffect(() => {
     if (sucessReview) {
@@ -67,6 +68,7 @@ const ProductScreen = () => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
+          <Meta title={product.name} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />

@@ -56,9 +56,7 @@ const ProfileScreen = () => {
     }
     setShowPassword(false);
   }
-  // const togglePassword = () => {
-  //   setShowPassword(!showPassword);
-  // };
+
   return (
     <Row>
       <Col md={3}>

@@ -52,7 +52,7 @@ export const logIn = (email, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
-      payLoad:
+      payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
@@ -96,7 +96,7 @@ export const register = (name, email, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
-      payLoad:
+      payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
@@ -127,7 +127,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_DETAILS_FAIL,
-      payLoad:
+      payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
@@ -158,7 +158,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,
-      payLoad:
+      payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
@@ -188,7 +188,7 @@ export const listUsers = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_LIST_FAIL,
-      payLoad:
+      payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
@@ -217,7 +217,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_DELETE_FAIL,
-      payLoad:
+      payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
@@ -246,7 +246,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_UPDATE_FAIL,
-      payLoad:
+      payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,

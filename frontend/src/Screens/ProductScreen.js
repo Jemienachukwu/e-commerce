@@ -73,7 +73,7 @@ const ProductScreen = () => {
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
             </Col>
-            <Col md={3}>
+            <Col md={6}>
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <h3>{product.name}</h3>
@@ -89,8 +89,6 @@ const ProductScreen = () => {
                   Description: {product.description}
                 </ListGroup.Item>
               </ListGroup>
-            </Col>
-            <Col md={3}>
               <Card>
                 <ListGroup variant="flush">
                   <ListGroup.Item>
@@ -148,6 +146,9 @@ const ProductScreen = () => {
                 </ListGroup>
               </Card>
             </Col>
+            {/* <Col md={3}>
+  
+            </Col> */}
           </Row>
 
           <Row>

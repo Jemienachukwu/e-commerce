@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
-import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
+import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { logout } from "../actions/userAction";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
@@ -18,9 +18,16 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-        <Container>
-          <LinkContainer to="/">
+      <Navbar
+        expand="lg"
+        bg="dark"
+        variant="dark"
+        collapseOnSelect
+        className="p-4"
+        // variant="light"
+      >
+        <>
+          <LinkContainer to="/" className="my-2">
             <Navbar.Brand>Online Store</Navbar.Brand>
           </LinkContainer>
 
@@ -66,7 +73,7 @@ const Header = () => {
               )}
             </Nav>
           </Navbar.Collapse>
-        </Container>
+        </>
       </Navbar>
     </header>
   );

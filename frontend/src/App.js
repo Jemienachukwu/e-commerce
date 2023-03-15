@@ -24,8 +24,8 @@ const App = () => {
   return (
     <Router>
       <Header />
-      <main className="py-3">
-        <Container>
+      <main className="p-4">
+        <>
           <Routes>
             <Route path="/shipping" element={<ShippingScreen />} />
             <Route path="/orders/:id" element={<OrderScreen />} />
@@ -62,7 +62,7 @@ const App = () => {
             <Route path="/page/:pageNumber" element={<HomeScreen />} />
             <Route path="/" element={<HomeScreen />} exact />
           </Routes>
-        </Container>
+        </>
       </main>
       <Footer />
     </Router>
